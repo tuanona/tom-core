@@ -1,74 +1,32 @@
-Cara Kerja dan Interaksi:
-Server Lokal (Containerized):
+Arsitektur Sistem
+Proyek ini terdiri dari tiga komponen utama yang saling terintegrasi:
 
-Server lokal bertanggung jawab untuk menjalankan game dan dunia virtual.
-Pemain bisa mengakses game dari laptop/PC melalui web browser untuk eksplorasi dunia, interaksi, dan aktivitas lainnya.
-Server ini juga menyediakan endpoint untuk TMA sebagai alat pendukung, seperti:
-Login QR Code.
-Sinkronisasi data blockchain.
-Minting NFT.
-TMA:
+Server Lokal (Containerized)
+Server lokal merupakan komponen inti yang menjalankan game dan dunia virtual. Dibangun menggunakan Rust dengan Actix-web framework, server ini menyediakan API untuk manajemen dunia virtual dan integrasi dengan TMA. Server menggunakan SQLite untuk penyimpanan data lokal dan dikemas dalam container Docker untuk kemudahan deployment.
+Web Interface
+Antarmuka web bertindak sebagai klien utama untuk interaksi dengan dunia virtual. Dikembangkan menggunakan React dan React Three Fiber untuk rendering 3D, interface ini memungkinkan pemain mengakses dan berinteraksi dengan dunia virtual melalui browser. Komunikasi real-time dengan server menggunakan WebSocket atau WebRTC.
+Telegram Mini App (TMA)
+TMA berfungsi sebagai portal administratif yang menangani otentikasi, manajemen reward, dan interaksi blockchain. Menggunakan Telegram Mini App SDK dan TON Connect SDK, TMA memfasilitasi proses login QR Code dan minting NFT.
 
-TMA lebih fokus pada fungsi administratif:
-Login (via QR Code).
-Reward, task, dan achievement.
-Proses minting NFT dan sinkronisasi data blockchain.
-TMA tidak digunakan untuk kontrol langsung seperti maju/mundur karena akan terlalu kompleks untuk gameplay.
-Web Interface (Dari Server):
+Alur Kerja Sistem
+Inisiasi dan Login:
 
-Web interface adalah klien utama untuk eksplorasi dunia dan aktivitas di pulau.
-Login menggunakan QR Code, di-scan melalui TMA, sehingga user terhubung ke dunia mereka melalui server lokal.
-Flow Penggunaan:
-User Menjalankan Server Lokal:
+Pengguna menjalankan server lokal melalui container Docker
+Server membuat instance dunia virtual dan menghasilkan QR Code untuk login
+Pengguna mengakses web interface melalui browser
+Login dilakukan dengan memindai QR Code menggunakan TMA di perangkat mobile
 
-User menjalankan server lokal di laptop/PC mereka (containerized).
-Server memulai instance dunia virtual.
-User Membuka Web Interface:
+Gameplay dan Interaksi:
 
-User mengakses web interface di browser (contoh: http://localhost:3000).
-Di layar, muncul QR Code untuk login.
-Login via TMA:
+Setelah terautentikasi, pengguna dapat mengeksplorasi dan berinteraksi dengan dunia virtual
+Semua aktivitas dan perubahan tercatat dalam database lokal
+Komunikasi real-time antara web interface dan server menggunakan WebSocket
 
-User membuka TMA di ponsel, memindai QR Code untuk otentikasi.
-Setelah login, server mengenali user dan memuat data dari blockchain/local DB.
-Gameplay:
+Manajemen Data dan Blockchain:
 
-User menggunakan web interface untuk bermain (maju/mundur, interaksi di pulau).
-Data aktivitas disimpan di database lokal.
-User dapat memilih minting NFT dari TMA untuk menyimpan data secara permanen di blockchain.
-Sinkronisasi dan Diskoneksi:
+Data aktivitas disimpan secara lokal di SQLite
+Pengguna dapat memilih untuk minting komponen sebagai NFT
+TMA menangani proses sinkronisasi data dengan blockchain
+Data yang telah di-mint dapat dipulihkan jika terjadi kehilangan data lokal
 
-Jika server mati atau user keluar, data hanya tersimpan secara lokal.
-Jika data sudah diminting, dapat dipulihkan kembali dari blockchain.
-Teknologi yang Digunakan:
-Frontend (Web Interface di Laptop/PC):
-
-React + React Three Fiber untuk tampilan 3D dunia virtual.
-WebSocket atau WebRTC untuk komunikasi real-time antara klien dan server.
-Backend (Server Lokal):
-
-Rust untuk performa tinggi dan pengelolaan API.
-SQLite untuk database lokal (menyimpan data komponen dunia).
-Actix-web untuk melayani API dan file web interface.
-Docker untuk containerisasi server.
-TMA:
-
-Telegram Mini App SDK untuk login QR Code dan interaksi blockchain.
-TON Connect SDK untuk minting NFT.
-Blueprint Proyek (Server Fokus):
-A. Flow Login dan Gameplay
-Server Lokal:
-
-Membuat dunia virtual.
-Menghasilkan QR Code untuk login.
-Menyediakan API untuk sinkronisasi data dan kontrol dunia virtual.
-Web Interface:
-
-Menampilkan dunia virtual (3D view) dan kontrol pemain.
-Menyediakan kontrol dasar (maju, mundur, interaksi).
-Berkomunikasi dengan server lokal melalui WebSocket.
-TMA:
-
-Login via QR Code.
-Sinkronisasi data dunia dengan blockchain.
-Minting NFT untuk menyimpan kompone
+Kelebihan arsitektur ini terletak pada pemisahan yang jelas antara komponen gameplay (server lokal dan web interface) dengan komponen administratif (TMA), memungkinkan pengalaman bermain yang lebih fokus dan efisien. Penggunaan teknologi modern seperti Rust, React Three Fiber, dan blockchain memberikan fondasi yang kuat untuk performa dan keamanan sistem.
