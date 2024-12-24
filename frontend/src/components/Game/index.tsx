@@ -14,7 +14,7 @@ export const Game: React.FC = () => {
         const pos = await gameApi.getPosition();
         setPosition(pos);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Failed to connect to server');
       }
     };
@@ -24,7 +24,7 @@ export const Game: React.FC = () => {
   useEffect(() => {
     const handleKeyPress = async (event: KeyboardEvent) => {
       const moveSpeed = 5;
-      let newPosition = { ...position };
+      const newPosition = { ...position };
 
       switch (event.key) {
         case 'ArrowUp':
@@ -47,7 +47,7 @@ export const Game: React.FC = () => {
         await gameApi.updatePosition(newPosition);
         setPosition(newPosition);
         setError(null);
-      } catch (err) {
+      } catch {
         setError('Failed to update position');
       }
     };
