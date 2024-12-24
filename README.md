@@ -1,80 +1,181 @@
-# TOM-Server
+# TOM Server
 
 ## Overview
-TOM-Server is a core component of The Open Metaverse (TOM) ecosystem. This server handles essential functionalities like managing local databases, enabling interactions between users, and connecting to TOM's blockchain-based smart contracts for minting NFTs. The project is open source and welcomes contributions from the community.
 
-## Key Features
-- Containerized with Docker for easy deployment.
-- Developed with TypeScript for frontend interactions and Rust for backend services.
-- Provides APIs for seamless integration with TOM-TMA (Telegram Mini App) and TOM-SmartContract.
-- Implements local storage with optional blockchain minting for data permanence.
+TOM Server is the core component of The Open Metaverse project, providing local hosting capabilities for metaverse spaces. It combines a high-performance Rust backend with a React-based frontend to deliver immersive 3D experiences.
 
-## License
-This project is licensed under the **The Open Metaverse License (TOML)**:
-1. You are free to clone, modify, and distribute this project, including commercial use.
-2. Attribution is mandatory. You must include this license in any distribution and credit "The Open Metaverse."
-3. All integrations must use the official smart contracts provided by The Open Metaverse.
+## Features
 
-## Contributor Acknowledgment
-All contributors to this project will be listed in the CONTRIBUTORS.md file. Contributions include code, documentation, testing, and any other support for the project.
+- Local server deployment with minimal setup
+- Admin authentication via QR code
+- Real-time multiplayer support
+- Grid-based world system
+- GLTF asset management
+- Local database storage
+- WebSocket communication
+- TON blockchain integration
 
-## Repository Structure
-- **tom-server/**: This repository, which includes both the TypeScript and Rust components.
-- **tom-tma/**: The Telegram Mini App interface.
-- **tom-smartcontract/**: Blockchain-based smart contracts for the TOM ecosystem.
+## Technical Stack
 
-## Roadmap
+### Backend
+- Rust
+- Actix Web
+- SQLite
+- WebSocket support
 
-### Phase 1: Initial Setup
-- [x] Define project structure.
-- [x] Create Docker environment for server.
-- [x] Set up TypeScript frontend framework.
-- [x] Initialize Rust backend with Actix-web.
+### Frontend
+- TypeScript
+- React
+- React Three Fiber (R3F)
+- Vite
+- WebSocket client
 
-### Phase 2: Core Features
-- [ ] Implement local database management.
-- [ ] Develop APIs for user interactions and blockchain integration.
-- [ ] Enable QR-based login flow via TMA.
-- [ ] Establish data minting and retrieval mechanisms.
+## Prerequisites
 
-### Phase 3: Testing and Optimization
-- [ ] Comprehensive testing of API endpoints.
-- [ ] Optimize Rust backend for performance.
-- [ ] Test Docker deployment on multiple platforms.
-
-### Phase 4: Community and Expansion
-- [ ] Open project for community contributions.
-- [ ] List contributors in CONTRIBUTORS.md.
-- [ ] Provide extensive documentation for developers.
-
-## How to Contribute
-1. Fork the repository from the official TOM GitHub organization: [The Open Metaverse](https://github.com/orgs/the-open-metaverse).
-2. Clone your fork and create a new branch for your feature.
-3. Submit a pull request with a detailed explanation of your changes.
+- Rust toolchain (1.70 or higher)
+- Node.js (18.0 or higher)
+- SQLite 3
+- Git
 
 ## Installation
 
-### Prerequisites
-- Docker
-- Node.js (for TypeScript frontend)
-- Rust (with Cargo package manager)
-
-### Steps
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/the-open-metaverse/tom-server.git
-   cd tom-server
-   ```
-2. Build and run the Docker container:
-   ```bash
-   docker-compose up --build
-   ```
-3. Access the server locally at `http://localhost:3000`.
+```bash
+git clone [repository-url]
+cd tom-server
+```
 
-## Community
-Join our community to discuss ideas, report bugs, and share feedback:
-- **Discord**: [TOM Community](https://discord.gg/the-open-metaverse)
-- **GitHub Discussions**: [TOM Discussions](https://github.com/orgs/the-open-metaverse/discussions)
+2. Setup backend:
+```bash
+cd backend
+cargo build
+```
 
-## Contact
-For inquiries and support, email us at [support@theopenmetaverse.org](mailto:support@theopenmetaverse.org).
+3. Setup frontend:
+```bash
+cd frontend
+npm install
+```
+
+## Running the Server
+
+1. Start the backend:
+```bash
+cd backend
+cargo run
+```
+
+2. Start the frontend development server:
+```bash
+cd frontend
+npm run dev
+```
+
+The server will be available at:
+- Backend: http://localhost:8080
+- Frontend: http://localhost:3000
+
+## Development
+
+### Backend Development
+
+The Rust backend is structured into several modules:
+- `handlers`: Request handlers and WebSocket implementation
+- `models`: Data structures and database models
+- `services`: Business logic and external service integration
+- `utils`: Helper functions and utilities
+
+### Frontend Development
+
+The React frontend follows a component-based architecture:
+- `components`: UI and 3D world components
+- `hooks`: Custom React hooks
+- `services`: API and WebSocket clients
+- `store`: State management
+- `utils`: Helper functions
+
+## Testing
+
+```bash
+# Backend tests
+cd backend
+cargo test
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+## Building for Production
+
+```bash
+# Backend
+cd backend
+cargo build --release
+
+# Frontend
+cd frontend
+npm run build
+```
+## Folder Structure
+tom-server/
+├── backend/
+│   ├── src/
+│   │   ├── main.rs
+│   │   ├── config/
+│   │   │   └── mod.rs
+│   │   ├── models/
+│   │   │   ├── mod.rs
+│   │   │   ├── user.rs
+│   │   │   ├── world.rs
+│   │   │   └── asset.rs
+│   │   ├── handlers/
+│   │   │   ├── mod.rs
+│   │   │   ├── auth.rs
+│   │   │   ├── world.rs
+│   │   │   └── websocket.rs
+│   │   ├── services/
+│   │   │   ├── mod.rs
+│   │   │   ├── database.rs
+│   │   │   └── blockchain.rs
+│   │   └── utils/
+│   │       └── mod.rs
+│   ├── tests/
+│   ├── Cargo.toml
+│   └── README.md
+│
+└── frontend/
+    ├── src/
+    │   ├── components/
+    │   │   ├── world/
+    │   │   ├── ui/
+    │   │   └── shared/
+    │   ├── hooks/
+    │   ├── services/
+    │   │   ├── api.ts
+    │   │   └── websocket.ts
+    │   ├── store/
+    │   ├── types/
+    │   ├── utils/
+    │   ├── App.tsx
+    │   └── main.tsx
+    ├── public/
+    │   └── assets/
+    ├── package.json
+    ├── vite.config.ts
+    ├── tsconfig.json
+    └── README.md
+    
+## Configuration
+
+Server configuration can be modified through:
+- `backend/config/`: Server configuration files
+- `frontend/.env`: Environment variables for frontend
+
+## Contributing
+
+[Contributing guidelines]
+
+## License
+
+[License information](https://github.com/tuanona/tom-server/blob/main/LICENSE)
