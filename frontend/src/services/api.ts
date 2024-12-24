@@ -1,11 +1,11 @@
 // src/services/api.ts
 import { Position } from '../types/game';
 
-const BASE_URL = 'https://8080-idx-core-1735060440112.cluster-3g4scxt2njdd6uovkqyfcabgo6.cloudworkstations.dev';
+const CORE_API= import.meta.env.CORE_API || 'http://localhost:3000';
 
 export const gameApi = {
   async getPosition(): Promise<Position> {
-    const response = await fetch(`${BASE_URL}/position`, {
+    const response = await fetch(`${CORE_API}/position`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export const gameApi = {
   },
 
   async updatePosition(position: Position): Promise<void> {
-    const response = await fetch(`${BASE_URL}/position`, {
+    const response = await fetch(`${CORE_API}/position`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

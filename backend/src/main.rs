@@ -2,6 +2,7 @@ use actix_cors::Cors;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
+use std::env;
 
 #[derive(Serialize, Deserialize, Clone)]
 struct PlayerPosition {
@@ -27,7 +28,6 @@ async fn update_position(
     HttpResponse::Ok().json(&*position)
 }
 
-// Added a simple health check endpoint
 async fn health_check() -> impl Responder {
     HttpResponse::Ok().body("Server is running!")
 }
@@ -38,13 +38,16 @@ async fn main() -> std::io::Result<()> {
         player_position: Mutex::new(PlayerPosition { x: 0.0, y: 0.0 }),
     });
 
-    println!("Server starting at http://127.0.0.1:8080");
+    println!("Server starting on port 8080");
 
     HttpServer::new(move || {
         let cors = Cors::default()
-            .allow_any_origin()
-            .allow_any_method()
-            .allow_any_header();
+            .allowed_origin(&env::var("SURFACE_API").unwrap_or_else(|_| "http://localhost:8080".to_string()))
+            .allowed_methods(vec!["GET", "POST", "OPTIONS"])
+            .allowed_headers(vec!["Content-Type", "Authorization", "Accept"])
+            .expose_headers(vec!["Access-Control-Allow-Origin"])
+            .supports_credentials()
+            .max_age(3600);
 
         App::new()
             .wrap(cors)
@@ -53,7 +56,7 @@ async fn main() -> std::io::Result<()> {
             .route("/position", web::get().to(get_position))
             .route("/position", web::post().to(update_position))
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await
 }

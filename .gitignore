@@ -1,0 +1,19 @@
+# tom-server/.gitignore
+# Backend
+/backend/target
+/backend/Cargo.lock
+
+# Frontend
+/frontend/node_modules
+/frontend/dist
+/frontend/.env.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
