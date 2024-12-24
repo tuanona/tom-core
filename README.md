@@ -118,6 +118,7 @@ cd frontend
 npm run build
 ```
 ## Folder Structure
+```
 tom-server/
 ├── backend/
 │   ├── src/
@@ -165,7 +166,7 @@ tom-server/
     ├── vite.config.ts
     ├── tsconfig.json
     └── README.md
-    
+```    
 ## Configuration
 
 Server configuration can be modified through:
