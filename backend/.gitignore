@@ -1,0 +1,8 @@
+# Backend .gitignore
+# /backend/.gitignore
+/target
+**/*.rs.bk
+Cargo.lock
+.env
+.idea/
+.vscode/
