@@ -9,14 +9,21 @@
     pkgs.rustc
     pkgs.rustfmt
     pkgs.stdenv.cc
+
+    # Database
+    pkgs.sqlite
   ];
   # Sets environment variables in the workspace
   env = {
     RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
   };
+  # Set services
+  services.docker.enable = true;
+
   idx = {
     # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
     extensions = [
+      "qwtel.sqlite-viewer"
       "rust-lang.rust-analyzer"
       "tamasfe.even-better-toml"
       "serayuzgur.crates"
