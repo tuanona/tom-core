@@ -1,41 +1,57 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
 { pkgs, ... }: {
-  # Which nixpkgs channel to use.
-  channel = "stable-24.05"; # or "unstable"
-  # Use https://search.nixos.org/packages to find packages
-  packages = [
-    pkgs.cargo
-    pkgs.rustc
-    pkgs.rustfmt
-    pkgs.stdenv.cc
+  # Channel configuration
+  channel = "stable-24.05";
 
-    # Database
-    pkgs.sqlite
+  # Essential packages
+  packages = [
+    pkgs.rustup
+    pkgs.pkg-config    # Added for build dependencies
+    pkgs.openssl       # Common dependency for Rust projects
+    pkgs.stdenv.cc     # C compiler toolchain
+    pkgs.sqlite        # For database support
   ];
-  # Sets environment variables in the workspace
+
+  # Environment variables
   env = {
     RUST_SRC_PATH = "${pkgs.rustPlatform.rustLibSrc}";
+    RUSTUP_HOME = "$HOME/.rustup";
+    CARGO_HOME = "$HOME/.cargo";
   };
-  # Set services
+  # Enable Docker service
   services.docker.enable = true;
 
+  # IDX configuration
   idx = {
-    # Search for the extensions you want on https://open-vsx.org/ and use "publisher.id"
+    # Development extensions
     extensions = [
-      "qwtel.sqlite-viewer"
       "rust-lang.rust-analyzer"
       "tamasfe.even-better-toml"
       "serayuzgur.crates"
       "vadimcn.vscode-lldb"
+      "qwtel.sqlite-viewer"
     ];
+
     workspace = {
       onCreate = {
-        # Open editors for the following files by default, if they exist:
+        # Setup Rust toolchain
+        setup-rust = ''
+          rustup install stable
+          rustup default stable
+          rustup component add rustfmt clippy rust-src rust-analysis
+        '';
+        
+        # Default files to open
         default.openFiles = ["src/main.rs"];
       };
+
+      # Verify Rust setup on workspace start
+      onStart = {
+        check-rust = "rustup show";
+      };
     };
-    # Enable previews and customize configuration
+
+    # Preview configuration (can be expanded as needed)
     previews = {};
   };
+
 }
