@@ -29,6 +29,7 @@
       "serayuzgur.crates"
       "vadimcn.vscode-lldb"
       "qwtel.sqlite-viewer"
+      "ms-azuretools.vscode-docker"
     ];
 
     workspace = {
