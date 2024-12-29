@@ -52,7 +52,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .app_data(game_state.clone())
-            .route("/health", web::get().to(health_check))
+            .route("/", web::get().to(health_check))
             .route("/position", web::get().to(get_position))
             .route("/position", web::post().to(update_position))
     })
