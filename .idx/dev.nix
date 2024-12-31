@@ -9,6 +9,7 @@
     pkgs.openssl       # Common dependency for Rust projects
     pkgs.stdenv.cc     # C compiler toolchain
     pkgs.sqlite        # For database support
+    pkgs.go
   ];
 
   # Environment variables
