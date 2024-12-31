@@ -33,9 +33,9 @@ WORKDIR /usr/local/bin
 # Copy the statically linked binary
 COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/tom-core .
 
-EXPOSE 80
+EXPOSE 2000
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD curl -f http://localhost:8080/health || exit 1
+    CMD curl -f http://localhost:2000/health || exit 1
 
 CMD ["tom-core"]
