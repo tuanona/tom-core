@@ -2,7 +2,6 @@ use actix_cors::Cors;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
-use std::env;
 
 #[derive(Serialize, Deserialize, Clone)]
 struct PlayerPosition {
@@ -42,7 +41,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         let cors = Cors::default()
-            .allowed_origin(&env::var("SURFACE_API").unwrap_or_else(|_| "http://localhost:8080".to_string()))
+            .allowed_origin("http://surface:1000")
             .allowed_methods(vec!["GET", "POST", "OPTIONS"])
             .allowed_headers(vec!["Content-Type", "Authorization", "Accept"])
             .expose_headers(vec!["Access-Control-Allow-Origin"])
@@ -56,7 +55,7 @@ async fn main() -> std::io::Result<()> {
             .route("/position", web::get().to(get_position))
             .route("/position", web::post().to(update_position))
     })
-    .bind("0.0.0.0:8080")?
+    .bind("0.0.0.0:1000")?
     .run()
     .await
 }
