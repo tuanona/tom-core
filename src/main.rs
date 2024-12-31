@@ -37,11 +37,11 @@ async fn main() -> std::io::Result<()> {
         player_position: Mutex::new(PlayerPosition { x: 0.0, y: 0.0 }),
     });
 
-    println!("Server starting on port 8080");
+    println!("Server starting on port 2000");
 
     HttpServer::new(move || {
         let cors = Cors::default()
-            .allowed_origin("http://surface:1000")
+            .allow_any_origin()
             .allowed_methods(vec!["GET", "POST", "OPTIONS"])
             .allowed_headers(vec!["Content-Type", "Authorization", "Accept"])
             .expose_headers(vec!["Access-Control-Allow-Origin"])
@@ -55,7 +55,7 @@ async fn main() -> std::io::Result<()> {
             .route("/position", web::get().to(get_position))
             .route("/position", web::post().to(update_position))
     })
-    .bind("0.0.0.0:1000")?
+    .bind("0.0.0.0:2000")?
     .run()
     .await
 }
