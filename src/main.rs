@@ -1,5 +1,6 @@
 use actix_cors::Cors;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_files as fs;
 use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 
@@ -51,6 +52,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .app_data(game_state.clone())
+            .service(fs::Files::new("/static", "./static").index_file("index.html"))
             .route("/", web::get().to(health_check))
             .route("/position", web::get().to(get_position))
             .route("/position", web::post().to(update_position))

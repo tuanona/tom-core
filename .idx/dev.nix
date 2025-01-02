@@ -10,6 +10,7 @@
     pkgs.stdenv.cc     # C compiler toolchain
     pkgs.sqlite        # For database support
     pkgs.deno
+    pkgs.gnumake
   ];
 
   # Environment variables

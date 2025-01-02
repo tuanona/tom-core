@@ -1,41 +1,27 @@
-# Build stage
-FROM rust:1.83.0 as builder
+# Stage 1: Build Frontend
+FROM denoland/deno:2.1.4 AS surface
+WORKDIR /app
+COPY surface/ ./surface
+WORKDIR /app/surface
+RUN deno task build
 
-WORKDIR /usr/src/app
+# Stage 2: Build Backend
+FROM rust:1.83 AS core
+WORKDIR /app
+COPY . .
+RUN cargo build --release
 
-# Install musl-tools for static linking
-RUN apt-get update && \
-    apt-get install -y musl-tools && \
-    rustup target add x86_64-unknown-linux-musl
-
-# Copy manifests
-COPY Cargo.toml Cargo.lock ./
-
-# Create dummy main.rs to cache dependencies
-RUN mkdir src && \
-    echo "fn main() {}" > src/main.rs && \
-    cargo build --target x86_64-unknown-linux-musl --release && \
-    rm -rf src
-
-# Copy actual source code
-COPY src ./src
-
-# Build the actual application with static linking
-RUN cargo build --target x86_64-unknown-linux-musl --release
-
-# Runtime stage
-FROM alpine:3.18
-
-RUN apk add --no-cache curl
-
-WORKDIR /usr/local/bin
-
-# Copy the statically linked binary
-COPY --from=builder /usr/src/app/target/x86_64-unknown-linux-musl/release/tom-core .
-
+# Stage 3: Production Image
+FROM debian:bullseye-slim AS production
+WORKDIR /app
+COPY --from=surface /app/surface/dist ./static
+COPY --from=core /app/target/release/tom-core .
 EXPOSE 2000
+CMD ["./tom-core"]
 
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD curl -f http://localhost:2000/health || exit 1
-
-CMD ["tom-core"]
+# Stage 4: Development
+FROM denoland/deno:2.1.4 AS development
+WORKDIR /app
+COPY . .
+WORKDIR /app/surface
+CMD ["deno", "task", "dev"]
