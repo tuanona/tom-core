@@ -52,10 +52,13 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .app_data(game_state.clone())
-            .service(fs::Files::new("/static", "./static").index_file("index.html"))
-            .route("/", web::get().to(health_check))
-            .route("/position", web::get().to(get_position))
-            .route("/position", web::post().to(update_position))
+            .service(
+                web::scope("/api")
+                    .route("/health", web::get().to(health_check))
+                    .route("/position", web::get().to(get_position))
+                    .route("/position", web::post().to(update_position))
+            )
+            .service(fs::Files::new("/", "./static").index_file("index.html"))
     })
     .bind("0.0.0.0:2000")?
     .run()

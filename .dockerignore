@@ -3,3 +3,4 @@ target
 README.md
 .gitignore
 .env.example
+Makefile

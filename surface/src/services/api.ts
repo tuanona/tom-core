@@ -1,7 +1,6 @@
-// src/services/api.ts
 import { Position } from '../types/game.ts';
 
-const CORE_API= 'http://localhost:2000';
+const CORE_API = 'http://localhost:2000/api';  // Updated API base URL
 
 export const gameApi = {
   async getPosition(): Promise<Position> {
@@ -17,7 +16,7 @@ export const gameApi = {
     return response.json();
   },
 
-  async updatePosition(position: Position): Promise<void> {
+  async updatePosition(position: Position): Promise<Position> {
     const response = await fetch(`${CORE_API}/position`, {
       method: 'POST',
       headers: {
@@ -28,5 +27,6 @@ export const gameApi = {
     });
     
     if (!response.ok) throw new Error('Failed to update position');
-  }
+    return response.json();
+  },
 };
