@@ -1,6 +1,6 @@
 { pkgs, ... }: {
   # Channel configuration
-  channel = "stable-24.05";
+  channel = "stable-24.11";
 
   # Essential packages
   packages = [
@@ -9,7 +9,7 @@
     pkgs.openssl       # Common dependency for Rust projects
     pkgs.stdenv.cc     # C compiler toolchain
     pkgs.sqlite        # For database support
-    pkgs.go
+    pkgs.deno
   ];
 
   # Environment variables
